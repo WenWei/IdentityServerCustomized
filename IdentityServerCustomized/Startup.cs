@@ -1,3 +1,5 @@
+using IdentityServer4.Services;
+using IdentityServer4.Validation;
 using IdentityServerCustomized.Postgresql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,12 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using static IdentityServer4.IdentityServerConstants;
 
 namespace IdentityServerCustomized
@@ -46,7 +45,7 @@ namespace IdentityServerCustomized
 
             app.UseSerilogRequestLogging();
 
-            DatabaseInitializer.Initialize(app);
+            DatabaseInitializer.Initialize(app, Configuration);
             app.UseIdentityServer();
 
             app.UseHttpsRedirection();
@@ -79,6 +78,9 @@ namespace IdentityServerCustomized
                    .AddOperationalStore(option =>
                           option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("IdentityServerConnection"), options =>
                           options.MigrationsAssembly("IdentityServerCustomized.Postgresql")));
+
+            builder.Services.AddTransient<IProfileService, Validators.ProfileService>();
+            builder.Services.AddTransient<IResourceOwnerPasswordValidator, Validators.ResourceOwnerPasswordValidator>();
         }
     }
 }
