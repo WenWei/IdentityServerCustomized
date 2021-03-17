@@ -1,7 +1,9 @@
+using IdentityServerCustomized.Postgresql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +27,15 @@ namespace IdentityServerCustomized
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentityServer()
+                    .AddDeveloperSigningCredential()
+                    .AddConfigurationStore(option =>
+                           option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("IdentityServerConnection"), options =>
+                           options.MigrationsAssembly("IdentityServerCustomized.Postgresql")))
+                    .AddOperationalStore(option =>
+                           option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("IdentityServerConnection"), options =>
+                           options.MigrationsAssembly("IdentityServerCustomized.Postgresql")));
+
             services.AddControllers();
         }
 
@@ -35,6 +46,9 @@ namespace IdentityServerCustomized
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            DatabaseInitializer.Initialize(app);
+            app.UseIdentityServer();
 
             app.UseHttpsRedirection();
 
