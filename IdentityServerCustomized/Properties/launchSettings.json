@@ -22,6 +22,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         "Serilog__WriteTo__1__Args__serverUrl": "http://localhost:5431",
+        "IdentityServer__Clients__0__ClientSecrets__0__Value": "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=",
+        "IdentityServer__Clients__1__ClientSecrets__0__Value": "K7gNU3sdo+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "Serilog__WriteTo__1__Args__apiKey": "MzetwA1A4GJwnrILziZz"
       },

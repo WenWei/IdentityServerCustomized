@@ -16,8 +16,12 @@ namespace IdentityServerCustomized.Validators
 
             context.Result = new GrantValidationResult(
                 subject: userName,
-                authenticationMethod: "",
-                claims: new[] { new Claim("name", "whatever") });
+                authenticationMethod: "password",
+                claims: new[] { 
+                    new Claim(ClaimTypes.Role, "user") ,
+                    new Claim(ClaimTypes.NameIdentifier, context.UserName)
+                    }
+                );
         }
     }
 }

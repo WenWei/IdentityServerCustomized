@@ -107,7 +107,7 @@ namespace IdentityServerCustomized.Postgresql
                     RefreshTokenExpiration = TokenExpiration.Sliding,
                     RefreshTokenUsage = TokenUsage.ReUse,
                     SlidingRefreshTokenLifetime = 1296000,
-                    AccessTokenLifetime = 60,
+                    AccessTokenLifetime = 3600,
                     AlwaysSendClientClaims = true,
                     Enabled = true,
                     ClientSecrets =
