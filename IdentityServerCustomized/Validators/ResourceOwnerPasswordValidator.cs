@@ -14,11 +14,14 @@ namespace IdentityServerCustomized.Validators
             var userName = context.UserName;
             var password = context.Password;
 
+            var role = context.Request.Raw["role"] ?? "user";
+
             context.Result = new GrantValidationResult(
                 subject: userName,
                 authenticationMethod: "password",
                 claims: new[] { 
-                    new Claim(ClaimTypes.Role, "user") ,
+                    new Claim(ClaimTypes.Role, role) ,
+                    new Claim(ClaimTypes.Name, context.UserName),
                     new Claim(ClaimTypes.NameIdentifier, context.UserName)
                     }
                 );

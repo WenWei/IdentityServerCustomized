@@ -3,6 +3,7 @@ using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using static IdentityServer4.IdentityServerConstants;
 
 namespace IdentityServerCustomized.Postgresql
@@ -16,6 +17,7 @@ namespace IdentityServerCustomized.Postgresql
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
+                new IdentityResource("roles", "Roles", new[] {ClaimTypes.Role}),
 #if DEBUG
                 new IdentityResource
                 {
@@ -35,7 +37,7 @@ namespace IdentityServerCustomized.Postgresql
             configuration.GetSection("IdentityServer:ApiScopes").Bind(scopes);
 
 #if DEBUG
-            scopes.AddRange( new List<ApiScope>
+            scopes.AddRange(new List<ApiScope>
             {
                 new ApiScope("ApiOne"),
                 new ApiScope("ApiTwo"),
@@ -53,7 +55,7 @@ namespace IdentityServerCustomized.Postgresql
             configuration.GetSection("IdentityServer:ApiResources").Bind(resources);
 
 #if DEBUG
-            resources.AddRange( new List<ApiResource>
+            resources.AddRange(new List<ApiResource>
             {
                 new ApiResource("ApiOne"),
                 new ApiResource("ApiTwo", new string[] { "rc.api.garndma" }),
@@ -79,7 +81,7 @@ namespace IdentityServerCustomized.Postgresql
             configuration.GetSection("IdentityServer:Clients").Bind(clients);
 
 #if DEBUG
-            clients.AddRange( new List<Client> {
+            clients.AddRange(new List<Client> {
                 // resource owner password grant client
                 new Client
                 {
@@ -119,6 +121,7 @@ namespace IdentityServerCustomized.Postgresql
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "roles",
                         "api1",
                         "api1.read",
                         "api1.write",

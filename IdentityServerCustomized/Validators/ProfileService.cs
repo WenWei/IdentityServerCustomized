@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace IdentityServerCustomized.Validators
 {
@@ -28,16 +29,22 @@ namespace IdentityServerCustomized.Validators
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Role, "user"),
+                // 必須有這 ClaimTypes.Name，在 WebAPI 的 HttpContext.User.Identity.Name 才會有值
+                new Claim(ClaimTypes.Name, context.Subject.GetSubjectId()),
                 new Claim(ClaimTypes.NameIdentifier, context.Subject.GetSubjectId())
             };
+
+            claims.Add(context.Subject.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role));
 
             context.IssuedClaims = claims;
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
-            //context.IsActive = false;
+            //var user = _userManager.GetUserAsync(context.Subject).Result;
+            //context.IsActive = (user != null) && ((!user.LockoutEnd.HasValue) || (user.LockoutEnd.Value <= DateTime.Now));
+            //return Task.FromResult(0);
+
         }
     }
 }
